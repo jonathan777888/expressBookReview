@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -166,6 +167,52 @@ public_users.get('/title/:title', async function (req, res) {
         res.status(404).json({message: err});
     }
 });
+// Task 11 - Get all books using async/await with Axios
+const getAllBooks = async () => {
+    try {
+        const response = await axios.get("http://localhost:5000/");
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error getting all books:", error.message);
+    }
+};
 
+// Get book details based on ISBN using Promise with Axios
+const getBookByISBN = (isbn) => {
+    return new Promise((resolve, reject) => {
+        axios.get(`http://localhost:5000/isbn/${isbn}`)
+            .then(response => {
+                console.log(response.data);
+                resolve(response.data);
+            })
+            .catch(error => {
+                console.error("Error getting book by ISBN:", error.message);
+                reject(error);
+            });
+    });
+};
+
+// Get books by author using async/await with Axios
+const getBooksByAuthor = async (author) => {
+    try {
+        const response = await axios.get(`http://localhost:5000/author/${encodeURIComponent(author)}`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error getting books by author:", error.message);
+    }
+};
+
+// Get books by title using async/await with Axios
+const getBooksByTitle = async (title) => {
+    try {
+        const response = await axios.get(`http://localhost:5000/title/${encodeURIComponent(title)}`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error getting books by title:", error.message);
+    }
+};
 module.exports.general = public_users;
 module.exports.general = public_users;
